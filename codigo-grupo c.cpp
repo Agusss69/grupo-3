@@ -100,3 +100,41 @@ void imprimirListaCompleta(NodoLista* cabeza) {
         temp = temp->siguiente;
     }
 }
+struct NodoCola {
+    Proceso info;
+    NodoCola* siguiente;
+};
+
+void encolarPorPrioridad(NodoCola* &frente, Proceso nuevoProceso) {
+    NodoCola* nuevoNodo = new NodoCola();
+    nuevoNodo->info = nuevoProceso;
+    nuevoNodo->siguiente = NULL;
+
+    if (frente == NULL || nuevoProceso.prioridad > frente->info.prioridad) {
+        nuevoNodo->siguiente = frente;
+        frente = nuevoNodo;
+    } else {
+        NodoCola* temp = frente;
+        while (temp->siguiente != NULL && temp->siguiente->info.prioridad >= nuevoProceso.prioridad) {
+            temp = temp->siguiente;
+        }
+        nuevoNodo->siguiente = temp->siguiente;
+        temp->siguiente = nuevoNodo;
+    }
+    cout << " Proceso " << nuevoProceso.nombre << "' listo en la cola" << endl;
+}
+
+void desencolarEjecutarCPU(NodoCola* &frente) {
+    if (frente == NULL) {
+        cout << " Nada que ejecutar La cola esta vacia" << endl;
+        return;
+    }
+    NodoCola* temp = frente;
+    frente = frente->siguiente;
+
+    cout << " ID: " << temp->info.id 
+         << " (" << temp->info.nombre << ") | Prioridad: " << temp->info.prioridad << endl;
+    
+    delete temp;
+}
+
